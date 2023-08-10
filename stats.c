@@ -139,7 +139,7 @@ void sort_array(uchar* arr, size_t arr_size) {
   if ( arr && arr_size > 0 ){
     for ( size_t end = arr_size; end >= 2; --end ){
       for ( size_t i = 1; i < end; ++i ){
-        if ( arr[i-1] > arr[i] ){
+        if ( arr[i-1] < arr[i] ){
           uchar tmp = arr[i-1];
           arr[i-1] = arr[i];
           arr[i] = tmp;
@@ -336,8 +336,8 @@ bool test_sort_array() {
 
   {
     /* Case 3 : sorted array */
-    uchar test_arr[TEST_SIZE] =  { 1, 2, 3, 4, 5 };
-    uchar expected_arr[TEST_SIZE] = { 1, 2, 3, 4, 5 };
+    uchar test_arr[TEST_SIZE] =  { 5, 4, 3, 2, 1 };
+    uchar expected_arr[TEST_SIZE] = { 5, 4, 3, 2, 1 };
 
     sort_array(test_arr, TEST_SIZE);
     res = compare_array(test_arr, expected_arr, TEST_SIZE);
@@ -349,7 +349,7 @@ bool test_sort_array() {
   {
     /* Case 4 : normal case : unsorted array */
     uchar test_arr[TEST_SIZE] = { 3, 1, 5, 2, 4 };
-    uchar expected_arr[TEST_SIZE] = { 1, 2, 3, 4, 5 };
+    uchar expected_arr[TEST_SIZE] =  { 5, 4, 3, 2, 1 };
 
     sort_array(test_arr, TEST_SIZE);
     res = compare_array(test_arr, expected_arr, TEST_SIZE);
