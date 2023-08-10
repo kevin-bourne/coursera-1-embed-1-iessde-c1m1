@@ -20,7 +20,6 @@
  */
 
 #include <stdio.h>
-#include <stdlib.h>
 #include <stdbool.h>
 #include <assert.h>
 #include "stats.h"
@@ -31,11 +30,12 @@
 /* unit tests */
 bool test_all();
 
+/* -------------------------------------------------------------------------- */
 void main() {
 
   uchar test[SIZE] = { 34, 201, 190, 154,   8, 194,   2,   6,
-                      114, 88,   45,  76, 123,  87,  25,  23,
-                      200, 122, 150, 90,   92,  87, 177, 244,
+                      114,  88,  45,  76, 123,  87,  25,  23,
+                      200, 122, 150,  90,  92,  87, 177, 244,
                       201,   6,  12,  60,   8,   2,   5,  67,
                         7,  87, 250, 230,  99,   3, 100,  90};
 
@@ -46,6 +46,7 @@ void main() {
   print_array(test, SIZE);
 }
 
+/* -------------------------------------------------------------------------- */
 /* Prints the statistics of an array */
 void print_statistics(uchar* arr, size_t arr_size) {
   uchar median = find_median(arr, arr_size);
@@ -65,6 +66,7 @@ void print_statistics(uchar* arr, size_t arr_size) {
   return;
 }
 
+/* -------------------------------------------------------------------------- */
 /* Prints an array to the screen */
 void print_array(uchar* arr, size_t arr_size) {
   printf("-----------------\n");
@@ -90,16 +92,7 @@ void print_array(uchar* arr, size_t arr_size) {
   printf("\n");
 }
 
-/* Returns the median value of an arr */
-uchar find_median(uchar* arr, size_t arr_size) {
-  return 0U;
-}
-
-/* Returns the mean of an arr */
-uchar find_mean(uchar* arr, size_t arr_size) {
-  return 0U;
-}
-
+/* -------------------------------------------------------------------------- */
 /* Helper function to return the boundary of an arr given a comparator */
 uchar find_boundary(uchar* arr, size_t arr_size, bool (comparator)(uchar, uchar)) {
   uchar res = 0;
@@ -115,25 +108,30 @@ uchar find_boundary(uchar* arr, size_t arr_size, bool (comparator)(uchar, uchar)
   return res;
 }
 
+/* -------------------------------------------------------------------------- */
 /* Helper function min */
 bool min_comparator(uchar x, uchar y) {
   return (x < y);
 }
 
+/* -------------------------------------------------------------------------- */
 /* Helper function max */
 bool max_comparator(uchar x, uchar y) {
   return (x > y);
 }
 
+/* -------------------------------------------------------------------------- */
 /* Returns the maximum of an arr */
 uchar find_maximum(uchar* arr, size_t arr_size) {
   return find_boundary(arr, arr_size, max_comparator);
 }
 
+/* -------------------------------------------------------------------------- */
 /* Returns the minimum of an arr */
 uchar find_minimum(uchar* arr, size_t arr_size) {
   return find_boundary(arr, arr_size, min_comparator);
 }
+/* -------------------------------------------------------------------------- */
 
 /* Sort an array from largest to smallest in place */
 /* => Bubble sort : simplest algorithm */
@@ -149,6 +147,38 @@ void sort_array(uchar* arr, size_t arr_size) {
       }
     }
   }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Helper round_nearest_uchar */
+/* Not sure if it is authorized to use round() from math.h */
+/* This implementation assumes : */
+/*  - d is > 0, */
+/*  - can be safely converted into a uchar */
+uchar round_nearest_integer(double d) {
+  return (uchar) (d + 0.5);
+}
+
+/* -------------------------------------------------------------------------- */
+/* Returns the mean of an arr */
+uchar find_mean(uchar* arr, size_t arr_size) {
+  uchar res = 0;
+  if(arr && arr_size > 0) {
+    /* cannot use uchar to do the sum : may overflow => use double */
+    double sum = (double) arr[0];
+    for(size_t i = 1; i < arr_size; ++i) {
+      sum += (double) arr[i];
+    }
+    /* This is safe because the mean is lower than the maximum of the array */
+    res = round_nearest_integer(sum/arr_size);
+  }
+  return res;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Returns the median value of an arr */
+uchar find_median(uchar* arr, size_t arr_size) {
+  return 0U;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -315,6 +345,107 @@ bool test_sort_array() {
 }
 
 /* -------------------------------------------------------------------------- */
+bool test_round_nearest_integer() {
+  bool res = false;
+
+  {
+    res = ( round_nearest_integer(0) == 0 );
+    if ( !res ){
+      return res;
+    }
+  }
+
+  {
+    res = ( round_nearest_integer(1) == 1 );
+    if ( !res ){
+       return res;
+    }
+  }
+
+  {
+    res = ( round_nearest_integer(4.0/3) == 1 );
+    if ( !res ){
+      return res;
+    }
+  }
+
+  {
+    res = ( round_nearest_integer(5.0/3) == 2 );
+    if ( !res ){
+      return res;
+    }
+  }
+
+  return true;
+}
+/* -------------------------------------------------------------------------- */
+bool test_find_mean() {
+  bool res = false;
+
+  {
+    /* ------------------------------------- */
+    /* Case 1 : null array with arbitrary size */
+    /* the size must be != 0 to make sure that the right branch is tested */
+    uchar* null_arr = NULL;
+    size_t arbitrary_size = 999;
+
+    /* Should return 0 */
+    res = ( find_mean(null_arr, arbitrary_size) == 0 );
+    if ( !res ){
+      return res;
+    }
+  }
+
+  {
+    /* ------------------------------------- */
+    /* Case 2 : normal array, but size is set to 0 */
+    uchar test_arr[TEST_SIZE] = { 3, 1, 5, 2, 4 };
+    size_t zero_size = 0;
+
+    /* Should return 0 */
+    res = ( find_mean(test_arr, zero_size) == 0 );
+    if ( !res ){
+      return res;
+    }
+  }
+
+  {
+    /* ------------------------------------- */
+    /* Case 3 : normal case : sum is divisible by 5 */
+    uchar test_arr[TEST_SIZE] = { 3, 1, 5, 2, 4 };
+
+    res = ( find_mean(test_arr, TEST_SIZE) == 3 );
+    if ( !res ){
+      return res;
+    }
+  }
+
+  {
+    /* ------------------------------------- */
+    /* Case 4 : normal case : rounded down */
+    uchar test_arr[TEST_SIZE] = { 1, 10, 20, 30, 40 };
+
+    res = ( find_mean(test_arr, TEST_SIZE) == 20 );
+    if ( !res ){
+      return res;
+    }
+  }
+
+  {
+    /* ------------------------------------- */
+    /* Case 5 : normal case : rounded up */
+    uchar test_arr[TEST_SIZE] = { 3, 10, 20, 30, 40 };
+
+    res = ( find_mean(test_arr, TEST_SIZE) == 21 );
+    if ( !res ){
+      return res;
+    }
+  }
+
+  return true;
+}
+
+/* -------------------------------------------------------------------------- */
 bool test_all() {
   printf("------------------------------------------------------\n");
   printf("test_all...\n");
@@ -339,6 +470,20 @@ bool test_all() {
   res = test_sort_array();
   if ( !res ){
     printf("test_all...FAILED : test_sort_array\n");
+    return res;
+  }
+
+  /* ----------------------------------------------------- */
+  res = test_round_nearest_integer();
+  if ( !res ){
+    printf("test_all...FAILED : test_round_nearest_integer\n");
+    return res;
+  }
+
+  /* ----------------------------------------------------- */
+  res = test_find_mean();
+  if ( !res ){
+    printf("test_all...FAILED : test_find_mean\n");
     return res;
   }
 
