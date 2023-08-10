@@ -9,32 +9,110 @@
  *
  *****************************************************************************/
 /**
- * @file <Add File Name> 
- * @brief <Add Brief Description Here >
+ * @file stat.h
+ * @brief Function prototyped of the stats.c module
  *
- * <Add Extended Description Here>
+ * Declares all the prototypes needed for the stats module
+ * Redefines also unsigned types to shorter names
  *
- * @author <Add FirsName LastName>
- * @date <Add date >
+ * @author Kevin Bourn
+ * @date 10 Aug 2023
  *
  */
 #ifndef __STATS_H__
 #define __STATS_H__
 
-/* Add Your Declarations and Function Comments here */ 
+/* Redefine unsigned types to shorter names */
+typedef unsigned char uchar;
 
 /**
- * @brief <Add Brief Description of Function Here>
+ * @brief Prints the statistics of an array
  *
- * <Add Extended Description Here>
+ * A function that prints the statistics of an array including
+ * minimum, maximum, mean and median.
  *
- * @param <Add InputName> <add description here>
- * @param <Add InputName> <add description here>
- * @param <Add InputName> <add description here>
- * @param <Add InputName> <add description here>
+ * @param arr array to process
+ * @param arr_size size of arr
  *
- * @return <Add Return Informaiton here>
+ * @return nothing
  */
+void print_statistics(uchar* arr, size_t arr_size);
 
+/**
+ * @brief Prints an array to the screen
+ *
+ * Given an array of data and a length, prints the array to the screen
+ *
+ * @param arr array to process
+ * @param arr_size size of arr
+ *
+ * @return nothing
+ */
+void print_array(uchar* arr, size_t arr_size);
+
+/**
+ * @brief Returns the median value of an arr
+ *
+ * Given an array of data and a length, returns the median value
+ * rounded to the nearest int
+ *
+ * @param arr array to process
+ * @param arr_size size of arr
+ *
+ * @return the median value or 0 if the input are invalid or empty
+ */
+uchar find_median(uchar* arr, size_t arr_size);
+
+/**
+ * @brief Returns the mean of an arr
+ *
+ * Given an array of data and a length, returns the mean
+ * rounded to the nearest int
+ *
+ * @param arr array to process
+ * @param arr_size size of arr
+ *
+ * @return the mean value or 0 if the input are invalid or empty
+ */
+uchar find_mean(uchar* arr, size_t arr_size);
+
+/**
+ * @brief Returns the maximum of an arr
+ *
+ * Given an array of data and a length, returns the maximum
+ *
+ * @param arr array to process
+ * @param arr_size size of arr
+ *
+ * @return the maxmimun or 0 if the input are invalid or empty
+ */
+uchar find_maximum(uchar* arr, size_t arr_size);
+
+/**
+ * @brief Returns the minimum of an arr
+ *
+ * Given an array of data and a length, returns the minimum
+ *
+ * @param arr array to process
+ * @param arr_size size of arr
+ *
+ * @return the minimum or 0 if the input are invalid or empty
+ */
+uchar find_minimum(uchar* arr, size_t arr_size);
+
+/**
+ * @brief Sort an array from largest to smallest in place
+ *
+ * Given an array of data and a length, sorts the array from largest to smallest
+ * The zeroth Element should be the largest value, and the last element (n-1)
+ * should be the smallest value.
+ * The passed array is sorted in place.
+ *
+ * @param arr array to process
+ * @param arr_size size of arr
+ *
+ * @return nothing [The passed array is sorted in place.]
+ */
+void sort_array(uchar* arr, size_t arr_size);
 
 #endif /* __STATS_H__ */
