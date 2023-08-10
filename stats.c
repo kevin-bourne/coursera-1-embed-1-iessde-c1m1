@@ -135,9 +135,20 @@ uchar find_minimum(uchar* arr, size_t arr_size) {
   return find_boundary(arr, arr_size, min_comparator);
 }
 
-/*  Sort an array from largest to smallest in place */
+/* Sort an array from largest to smallest in place */
+/* => Bubble sort : simplest algorithm */
 void sort_array(uchar* arr, size_t arr_size) {
-  return;
+  if(arr && arr_size > 0) {
+    for ( size_t end = arr_size; end >= 2; --end ){
+      for ( size_t i = 1; i < end; ++i ){
+        if ( arr[i-1] > arr[i] ){
+          uchar tmp = arr[i-1];
+          arr[i-1] = arr[i];
+          arr[i] = tmp;
+        }
+      }
+    }
+  }
 }
 
 /* -------------------------------------------------------------------------- */
