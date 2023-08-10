@@ -149,42 +149,155 @@ void sort_array(uchar* arr, size_t arr_size) {
 /* -------------------------------------------------------------------------- */
 bool test_find_boundary() {
   bool res = false;
-  /* Case 1 : null array with arbitrary size */
-  /* the size must be != 0 to make sure that the right branch is tested */
-  uchar* null_arr = NULL;
-  size_t null_arr_size = 999;
-  res = ( find_maximum(null_arr, null_arr_size) == 0 );
-  if ( !res ){
-    return res;
-  }
-  res = ( find_minimum(null_arr, null_arr_size) == 0 );
-  if ( !res ){
-    return res;
+
+  {
+    /* ------------------------------------- */
+    /* Case 1 : null array with arbitrary size */
+    /* the size must be != 0 to make sure that the right branch is tested */
+    uchar* null_arr = NULL;
+    size_t arbitrary_size = 999;
+
+    /* Should return 0 */
+    res = ( find_maximum(null_arr, arbitrary_size) == 0 );
+    if ( !res ){
+      return res;
+    }
+
+    /* Should return 0 */
+    res = ( find_minimum(null_arr, arbitrary_size) == 0 );
+    if ( !res ){
+      return res;
+    }
   }
 
-  /* the following array is used for the rest of this test suite */
-  uchar test_arr[TEST_SIZE] = { 3, 1, 5, 2, 4 };
+  {
+    /* ------------------------------------- */
+    /* Case 2 : normal array, but size is set to 0 */
+    uchar test_arr[TEST_SIZE] = { 3, 1, 5, 2, 4 };
+    size_t zero_size = 0;
 
-  /* Case 2 : array, but size is set to 0 */
-  size_t zero_size = 0;
-  res = ( find_maximum(test_arr, zero_size) == 0 );
-  if ( !res ){
-    return res;
-  }
-  res = ( find_minimum(test_arr, zero_size) == 0 );
-  if ( !res ){
-    return res;
+    /* Should return 0 */
+    res = ( find_maximum(test_arr, zero_size) == 0 );
+    if ( !res ){
+      return res;
+    }
+
+    /* Should return 0 */
+    res = ( find_minimum(test_arr, zero_size) == 0 );
+    if ( !res ){
+      return res;
+    }
   }
 
-  /* Case 3 : normal case */
-  res = ( find_maximum(test_arr, TEST_SIZE) == 5 );
-  if ( !res ){
-    return res;
+  {
+    /* ------------------------------------- */
+    /* Case 3 : normal case */
+    /* Should return the maximum */
+    uchar test_arr[TEST_SIZE] = { 3, 1, 5, 2, 4 };
+
+    res = ( find_maximum(test_arr, TEST_SIZE) == 5 );
+    if ( !res ){
+      return res;
+    }
+
+    /* Should return the minimum */
+    res = ( find_minimum(test_arr, TEST_SIZE) == 1 );
+    if ( !res ){
+      return res;
+    }
   }
 
-  res = ( find_minimum(test_arr, TEST_SIZE) == 1 );
-  if ( !res ){
-    return res;
+  return true;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Helper function to compare if 2 arrays are identical */
+bool compare_array(uchar* arr1, uchar* arr2, size_t arr_size) {
+  bool res = true;
+  for ( size_t i = 0; i < arr_size; ++i ){
+    if ( arr1[i] != arr2[i] ){
+      res = false;
+      break;
+    }
+  }
+  return res;
+}
+
+/* -------------------------------------------------------------------------- */
+bool test_compare_array() {
+  bool res = false;
+
+  uchar test_arr1[TEST_SIZE] = { 3, 1, 5, 2, 4 };
+  uchar test_arr2[TEST_SIZE] = { 3, 1, 7, 2, 4 };
+
+  /* should return true */
+  res = compare_array(test_arr1, test_arr1, TEST_SIZE);
+  if ( res == false ){
+    return false;
+  }
+
+  /* should return false */
+  res = compare_array(test_arr1, test_arr2, TEST_SIZE);
+  if ( res == true ){
+    return false;
+  }
+
+  return true;
+}
+
+/* -------------------------------------------------------------------------- */
+bool test_sort_array() {
+  bool res = false;
+
+  {
+    /* Case 1 : null array with arbitrary size */
+    /* the size must be != 0 to make sure that the right branch is tested */
+    uchar* null_arr = NULL;
+    size_t arbitrary_size = 999;
+    sort_array(null_arr, arbitrary_size);
+    res = (null_arr == NULL);
+    if ( !res ){
+      return res;
+    }
+  }
+
+  {
+    /* Case 2 : normal array, but size is set to 0 */
+    /* array should remain unchanged        */
+
+    uchar test_arr[TEST_SIZE] = { 3, 1, 5, 2, 4 };
+    uchar expected_arr[TEST_SIZE] = { 3, 1, 5, 2, 4 };
+
+    size_t zero_size = 0;
+    sort_array(test_arr, zero_size);
+    res = compare_array(test_arr, expected_arr, TEST_SIZE);
+    if ( !res ){
+      return res;
+    }
+  }
+
+  {
+    /* Case 3 : sorted array */
+    uchar test_arr[TEST_SIZE] =  { 1, 2, 3, 4, 5 };
+    uchar expected_arr[TEST_SIZE] = { 1, 2, 3, 4, 5 };
+
+    sort_array(test_arr, TEST_SIZE);
+    res = compare_array(test_arr, expected_arr, TEST_SIZE);
+    if ( !res ){
+      return res;
+    }
+  }
+
+  {
+    /* Case 4 : normal case : unsorted array */
+    uchar test_arr[TEST_SIZE] = { 3, 1, 5, 2, 4 };
+    uchar expected_arr[TEST_SIZE] = { 1, 2, 3, 4, 5 };
+
+    sort_array(test_arr, TEST_SIZE);
+    res = compare_array(test_arr, expected_arr, TEST_SIZE);
+    if ( !res ){
+      return res;
+    }
   }
 
   return true;
@@ -200,7 +313,21 @@ bool test_all() {
   /* ----------------------------------------------------- */
   res = test_find_boundary();
   if ( !res ){
-    printf("test_all...FAILED\n");
+    printf("test_all...FAILED : test_find_boundary\n");
+    return res;
+  }
+
+  /* ----------------------------------------------------- */
+  res = test_compare_array();
+  if ( !res ){
+    printf("test_all...FAILED : test_compare_array\n");
+    return res;
+  }
+
+  /* ----------------------------------------------------- */
+  res = test_sort_array();
+  if ( !res ){
+    printf("test_all...FAILED : test_sort_array\n");
     return res;
   }
 
