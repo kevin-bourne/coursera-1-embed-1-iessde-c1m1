@@ -65,7 +65,18 @@ void print_statistics(uchar* arr, size_t arr_size) {
 
 /* Prints an array to the screen */
 void print_array(uchar* arr, size_t arr_size) {
-  return;
+  printf("------------------------------------------------------\n");
+  printf("Array\n");
+  printf("------------------------------------------------------\n");
+  if(!arr) {
+    printf("<null array>\n");
+  } else if(arr_size == 0) {
+    printf("<empty array>\n");
+  } else {
+    for(size_t i = 0; i < arr_size; ++i) {
+      printf("%02zu\t=>\t%hhu\n", i, arr[i]);
+    }
+  }
 }
 
 /* Returns the median value of an arr */
