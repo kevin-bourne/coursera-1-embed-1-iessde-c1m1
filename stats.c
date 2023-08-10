@@ -20,11 +20,16 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdbool.h>
+#include <assert.h>
 #include "stats.h"
 
 /* Size of the Data Set */
 #define SIZE (40)
+
+/* unit tests */
+bool test_all();
 
 void main() {
 
@@ -33,6 +38,8 @@ void main() {
                       200, 122, 150, 90,   92,  87, 177, 244,
                       201,   6,  12,  60,   8,   2,   5,  67,
                         7,  87, 250, 230,  99,   3, 100,  90};
+
+  assert(test_all());
 
   print_statistics(test, SIZE);
   sort_array(test, SIZE);
@@ -131,4 +138,73 @@ uchar find_minimum(uchar* arr, size_t arr_size) {
 /*  Sort an array from largest to smallest in place */
 void sort_array(uchar* arr, size_t arr_size) {
   return;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Unit tests                                                                 */
+/* -------------------------------------------------------------------------- */
+
+#define TEST_SIZE (5)
+
+/* -------------------------------------------------------------------------- */
+bool test_find_boundary() {
+  bool res = false;
+  /* Case 1 : null array with arbitrary size */
+  /* the size must be != 0 to make sure that the right branch is tested */
+  uchar* null_arr = NULL;
+  size_t null_arr_size = 999;
+  res = ( find_maximum(null_arr, null_arr_size) == 0 );
+  if ( !res ){
+    return res;
+  }
+  res = ( find_minimum(null_arr, null_arr_size) == 0 );
+  if ( !res ){
+    return res;
+  }
+
+  /* the following array is used for the rest of this test suite */
+  uchar test_arr[TEST_SIZE] = { 3, 1, 5, 2, 4 };
+
+  /* Case 2 : array, but size is set to 0 */
+  size_t zero_size = 0;
+  res = ( find_maximum(test_arr, zero_size) == 0 );
+  if ( !res ){
+    return res;
+  }
+  res = ( find_minimum(test_arr, zero_size) == 0 );
+  if ( !res ){
+    return res;
+  }
+
+  /* Case 3 : normal case */
+  res = ( find_maximum(test_arr, TEST_SIZE) == 5 );
+  if ( !res ){
+    return res;
+  }
+
+  res = ( find_minimum(test_arr, TEST_SIZE) == 1 );
+  if ( !res ){
+    return res;
+  }
+
+  return true;
+}
+
+/* -------------------------------------------------------------------------- */
+bool test_all() {
+  printf("------------------------------------------------------\n");
+  printf("test_all...\n");
+
+  bool res = false;
+
+  /* ----------------------------------------------------- */
+  res = test_find_boundary();
+  if ( !res ){
+    printf("test_all...FAILED\n");
+    return res;
+  }
+
+  printf("test_all...OK\n");
+  printf("------------------------------------------------------\n\n");
+  return true;
 }
