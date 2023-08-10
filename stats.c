@@ -20,7 +20,7 @@
  */
 
 #include <stdio.h>
-#include <stdlib.h>
+#include <stdbool.h>
 #include "stats.h"
 
 /* Size of the Data Set */
@@ -38,11 +38,6 @@ void main() {
   sort_array(test, SIZE);
   print_array(test, SIZE);
 }
-
-/* Add other Implementation File Code Here */
-
-
-/******************************************************************************/
 
 /* Prints the statistics of an array */
 void print_statistics(uchar* arr, size_t arr_size) {
@@ -68,17 +63,17 @@ void print_array(uchar* arr, size_t arr_size) {
   printf("-----------------\n");
   printf("Array\n");
   printf("-----------------\n");
-  if(!arr) {
+  if ( !arr ){
     printf("<null array>\n");
-  } else if(arr_size == 0) {
+  } else if ( arr_size == 0 ){
     printf("<empty array>\n");
   } else {
     const size_t row_size = 10;
     const size_t col_size = arr_size / row_size + 1;
-    for(size_t i = 0; i < row_size; ++i) {
-      for(size_t j = 0; j < col_size; ++j) {
+    for ( size_t i = 0; i < row_size; ++i ){
+      for ( size_t j = 0; j < col_size; ++j ){
         size_t idx = i + j*row_size;
-        if(idx < arr_size) {
+        if ( idx < arr_size ){
           printf("%2zu => %3hhu\t|\t", idx, arr[idx]);
         }
       }
@@ -98,14 +93,14 @@ uchar find_mean(uchar* arr, size_t arr_size) {
   return 0U;
 }
 
-/* Returns the maximum of an arr */
-uchar find_maximum(uchar* arr, size_t arr_size) {
+/* Helper function to return the boundary of an arr given a comparator */
+uchar find_boundary(uchar* arr, size_t arr_size, bool (comparator)(uchar, uchar)) {
   uchar res = 0;
   if(arr && arr_size > 0) {
     res = arr[0];
     for(size_t i = 1; i < arr_size; ++i) {
       uchar current = arr[i];
-      if(current > res) {
+      if(comparator(current, res)) {
         res = current;
       }
     }
@@ -113,9 +108,24 @@ uchar find_maximum(uchar* arr, size_t arr_size) {
   return res;
 }
 
+/* Helper function min */
+bool min_comparator(uchar x, uchar y) {
+  return (x < y);
+}
+
+/* Helper function max */
+bool max_comparator(uchar x, uchar y) {
+  return (x > y);
+}
+
+/* Returns the maximum of an arr */
+uchar find_maximum(uchar* arr, size_t arr_size) {
+  return find_boundary(arr, arr_size, max_comparator);
+}
+
 /* Returns the minimum of an arr */
 uchar find_minimum(uchar* arr, size_t arr_size) {
-  return 0U;
+  return find_boundary(arr, arr_size, min_comparator);
 }
 
 /*  Sort an array from largest to smallest in place */
