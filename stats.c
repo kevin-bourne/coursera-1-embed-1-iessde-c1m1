@@ -100,7 +100,17 @@ uchar find_mean(uchar* arr, size_t arr_size) {
 
 /* Returns the maximum of an arr */
 uchar find_maximum(uchar* arr, size_t arr_size) {
-  return 0U;
+  uchar res = 0;
+  if(arr && arr_size > 0) {
+    res = arr[0];
+    for(size_t i = 1; i < arr_size; ++i) {
+      uchar current = arr[i];
+      if(current > res) {
+        res = current;
+      }
+    }
+  }
+  return res;
 }
 
 /* Returns the minimum of an arr */
