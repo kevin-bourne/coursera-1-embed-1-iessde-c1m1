@@ -96,11 +96,11 @@ void print_array(uchar* arr, size_t arr_size) {
 /* Helper function to return the boundary of an arr given a comparator */
 uchar find_boundary(uchar* arr, size_t arr_size, bool (comparator)(uchar, uchar)) {
   uchar res = 0;
-  if(arr && arr_size > 0) {
+  if ( arr && arr_size > 0 ){
     res = arr[0];
-    for(size_t i = 1; i < arr_size; ++i) {
+    for ( size_t i = 1; i < arr_size; ++i ){
       uchar current = arr[i];
-      if(comparator(current, res)) {
+      if ( comparator(current, res) ){
         res = current;
       }
     }
@@ -136,7 +136,7 @@ uchar find_minimum(uchar* arr, size_t arr_size) {
 /* Sort an array from largest to smallest in place */
 /* => Bubble sort : simplest algorithm */
 void sort_array(uchar* arr, size_t arr_size) {
-  if(arr && arr_size > 0) {
+  if ( arr && arr_size > 0 ){
     for ( size_t end = arr_size; end >= 2; --end ){
       for ( size_t i = 1; i < end; ++i ){
         if ( arr[i-1] > arr[i] ){
@@ -163,10 +163,10 @@ uchar round_nearest_integer(double d) {
 /* Returns the mean of an arr */
 uchar find_mean(uchar* arr, size_t arr_size) {
   uchar res = 0;
-  if(arr && arr_size > 0) {
+  if ( arr && arr_size > 0 ){
     /* cannot use uchar to do the sum : may overflow => use double */
     double sum = (double) arr[0];
-    for(size_t i = 1; i < arr_size; ++i) {
+    for ( size_t i = 1; i < arr_size; ++i ){
       sum += (double) arr[i];
     }
     /* This is safe because the mean is lower than the maximum of the array */
@@ -177,8 +177,25 @@ uchar find_mean(uchar* arr, size_t arr_size) {
 
 /* -------------------------------------------------------------------------- */
 /* Returns the median value of an arr */
-uchar find_median(uchar* arr, size_t arr_size) {
-  return 0U;
+/* NB: arr must be not be modified by the calculation of a statistics */
+/* NB: it is assumed that arr_size <= SIZE */
+uchar find_median(const uchar* arr, size_t arr_size) {
+  uchar res = 0;
+  if ( arr && arr_size > 0 ){
+    uchar arr_copy[SIZE];
+    for ( size_t i = 0; i < arr_size; ++i ) {
+      arr_copy[i] = arr[i];
+    }
+
+    sort_array(arr_copy, arr_size);
+    size_t mid = arr_size / 2;
+    if ( arr_size % 2 == 0 ){
+      res = round_nearest_integer((arr_copy[mid-1] + arr_copy[mid]) / 2.0);
+    } else {
+      res = arr_copy[mid];
+    }
+  }
+  return res;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -464,7 +481,7 @@ bool test_find_median() {
   }
 
   {
-    /* ------------------------------------- */
+     /* ------------------------------------- */
     /* Case 2 : normal array, but size is set to 0 */
     uchar test_arr[TEST_SIZE] = { 3, 1, 5, 2, 4 };
     size_t zero_size = 0;
@@ -477,22 +494,36 @@ bool test_find_median() {
   }
 
   {
-    /* ------------------------------------- */
+     /* ------------------------------------- */
     /* Case 3 : normal case : odd size  */
     uchar test_arr[TEST_SIZE] = { 3, 1, 5, 2, 4 };
+    uchar expected_arr[TEST_SIZE] =  { 3, 1, 5, 2, 4 };
 
     res = ( find_median(test_arr, TEST_SIZE) == 3 );
+    if ( !res ){
+      return res;
+    }
+
+    /* test that the array has not been changed */
+    res = compare_array(test_arr, expected_arr, TEST_SIZE);
     if ( !res ){
       return res;
     }
   }
 
   {
-    /* ------------------------------------- */
+     /* ------------------------------------- */
     /* Case 4 : normal case : even size  */
     uchar test_arr[TEST_SIZE-1] = { 8, 6, 2, 4 };
+    uchar expected_arr[TEST_SIZE-1] = { 8, 6, 2, 4 };
 
-    res = ( find_median(test_arr, TEST_SIZE) == 5 );
+    res = ( find_median(test_arr, TEST_SIZE-1) == 5 );
+    if ( !res ){
+      return res;
+    }
+
+    /* test that the array has not been changed */
+    res = compare_array(test_arr, expected_arr, TEST_SIZE-1);
     if ( !res ){
       return res;
     }

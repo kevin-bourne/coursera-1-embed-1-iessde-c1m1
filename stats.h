@@ -61,7 +61,7 @@ void print_array(uchar* arr, size_t arr_size);
  *
  * @return the median value or 0 if the input are invalid or empty
  */
-uchar find_median(uchar* arr, size_t arr_size);
+uchar find_median(const uchar* arr, size_t arr_size);
 
 /**
  * @brief Returns the mean of an arr
