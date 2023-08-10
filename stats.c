@@ -46,6 +46,20 @@ void main() {
 
 /* Prints the statistics of an array */
 void print_statistics(uchar* arr, size_t arr_size) {
+  uchar median = find_median(arr, arr_size);
+  uchar mean = find_mean(arr, arr_size);
+  uchar maximum = find_maximum(arr, arr_size);
+  uchar minimum = find_minimum(arr, arr_size);
+
+  printf("------------------------------------------------------\n");
+  printf("Statistics of array (rounded to the nearest integer): \n");
+  printf("------------------------------------------------------\n");
+  printf("  - median\t=\t%hhu\n", median);
+  printf("  - mean \t=\t%hhu\n", mean);
+  printf("  - maximum\t=\t%hhu\n", maximum);
+  printf("  - minimum\t=\t%hhu\n", minimum);
+  printf("\n");
+
   return;
 }
 
