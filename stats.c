@@ -446,6 +446,62 @@ bool test_find_mean() {
 }
 
 /* -------------------------------------------------------------------------- */
+bool test_find_median() {
+  bool res = false;
+
+  {
+    /* ------------------------------------- */
+    /* Case 1 : null array with arbitrary size */
+    /* the size must be != 0 to make sure that the right branch is tested */
+    uchar* null_arr = NULL;
+    size_t arbitrary_size = 999;
+
+    /* Should return 0 */
+    res = ( find_median(null_arr, arbitrary_size) == 0 );
+    if ( !res ){
+      return res;
+    }
+  }
+
+  {
+    /* ------------------------------------- */
+    /* Case 2 : normal array, but size is set to 0 */
+    uchar test_arr[TEST_SIZE] = { 3, 1, 5, 2, 4 };
+    size_t zero_size = 0;
+
+    /* Should return 0 */
+    res = ( find_median(test_arr, zero_size) == 0 );
+    if ( !res ){
+      return res;
+    }
+  }
+
+  {
+    /* ------------------------------------- */
+    /* Case 3 : normal case : odd size  */
+    uchar test_arr[TEST_SIZE] = { 3, 1, 5, 2, 4 };
+
+    res = ( find_median(test_arr, TEST_SIZE) == 3 );
+    if ( !res ){
+      return res;
+    }
+  }
+
+  {
+    /* ------------------------------------- */
+    /* Case 4 : normal case : even size  */
+    uchar test_arr[TEST_SIZE-1] = { 8, 6, 2, 4 };
+
+    res = ( find_median(test_arr, TEST_SIZE) == 5 );
+    if ( !res ){
+      return res;
+    }
+  }
+
+  return true;
+}
+
+/* -------------------------------------------------------------------------- */
 bool test_all() {
   printf("------------------------------------------------------\n");
   printf("test_all...\n");
@@ -484,6 +540,13 @@ bool test_all() {
   res = test_find_mean();
   if ( !res ){
     printf("test_all...FAILED : test_find_mean\n");
+    return res;
+  }
+
+  /* ----------------------------------------------------- */
+  res = test_find_median();
+  if ( !res ){
+    printf("test_all...FAILED : test_find_median\n");
     return res;
   }
 
