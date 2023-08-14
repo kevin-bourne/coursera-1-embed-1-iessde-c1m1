@@ -1,29 +1,25 @@
-###******************************************************************************
-# Copyright (C) 2017 by Alex Fosdick - University of Colorado
-#
-# Redistribution, modification or use of this software in source or binary
-# forms is permitted as long as the files maintain this copyright. Users are 
-# permitted to modify this and use it to learn about the field of embedded
-# software. Alex Fosdick and the University of Colorado are not liable for any
-# misuse of this material. 
-#
-###*****************************************************************************
+### ----------------------------------------------------------------------------
+### Copyright (C) 2017 by Alex Fosdick - University of Colorado
+###
+### Redistribution, modification or use of this software in source or binary
+### forms is permitted as long as the files maintain this copyright. Users are
+### permitted to modify this and use it to learn about the field of embedded
+### software. Alex Fosdick and the University of Colorado are not liable for any
+### misuse of this material. 
+###
+### ----------------------------------------------------------------------------
+### Coursera - University of Colorado Boulder
+### 
+### Introduction to Embedded Systems Software and Development Environments
+### 
+### Week 1 Application Assignment
+### 
+### ----------------------------------------------------------------------------
+### Author : Kevin Bourne
+### Date : 10 Aug 2023
+### ----------------------------------------------------------------------------
 
-#*****************************************************************************
-# Coursera - University of Colorado Boulder
-#
-# Introduction to Embedded Systems Software and Development Environments
-#
-# Week 1 Application Assignment
-#
-#*****************************************************************************
-
-#*****************************************************************************
-# Author : Kevin Bourne
-# Date : 10 Aug 2023
-#*****************************************************************************
-
-# Purpose
+## Purpose
 
 This programm analyzes an array of unsigned char data items and report these analytics :
  - maximum
@@ -35,18 +31,18 @@ In addition, it reorders the data set from large to small.
 
 The data are then printed in a nice formatted presentation.
 
-# Usage
+## Usage
 
 ./stats.out
 
-# Limits
+## Limits
 
 All statistics are rounded down to the nearest integer.
 
 
-#*****************************************************************************
-# Assignment text
-#*****************************************************************************
+### ----------------------------------------------------------------------------
+### Assignment text
+### ----------------------------------------------------------------------------
 
 You are to write a couple of functions that can analyze an array of unsigned char data items and
 report analytics on the maximum, minimum, mean, and median of the data set. In addition,
